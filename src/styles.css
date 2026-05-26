@@ -1,18 +1,47 @@
 * {
-    font-family: "Elms Sans", sans-serif;
-    background-color: #2E2E2E;
+  font-family: "Elms Sans", sans-serif;
+  background-color: #2e2e2e;
 }
 
-.logo{
-    width: 60px;
-    height: 60px;
-    background-color: black;
+.logo {
+  width: 60px;
+  height: 60px;
+  background-color: black;
 }
 
-.navbar{
-    background-color: black;
+.navbar {
+  background-color: black;
 }
 
-.navbar-Brand{
-    background-color: black;
+.navbar-Brand {
+  background-color: black;
+}
+
+.engranaje {
+  width: 80px;
+  height: 80px;
+}
+
+.etapa1 {
+  width: 300px;
+  height: 250px;
+}
+
+.etapa2 {
+  width: 300px;
+  height: 250px;
+}
+
+.etapa3 {
+  width: 300px;
+  height: 250px;
+}
+
+.etapa4 {
+  width: 300px;
+  height: 250px;
+}
+
+.input{
+    background-color: gray;
 }
