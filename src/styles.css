@@ -1,0 +1,18 @@
+* {
+    font-family: "Elms Sans", sans-serif;
+    background-color: #2E2E2E;
+}
+
+.logo{
+    width: 60px;
+    height: 60px;
+    background-color: black;
+}
+
+.navbar{
+    background-color: black;
+}
+
+.navbar-Brand{
+    background-color: black;
+}
