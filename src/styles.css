@@ -1,6 +1,7 @@
 * {
   font-family: "Elms Sans", sans-serif;
   background-color: #2e2e2e;
+  color: white;
 }
 
 .logo {
@@ -44,4 +45,21 @@
 
 .input{
     background-color: gray;
+}
+
+.contenedor-informe-general{
+    background-color: rgba(0, 0, 0, 0.339);
+}
+
+.contorno{
+    width: 65px;
+    height: 70px;
+    background-color: rgb(67, 67, 67);
+}
+
+.relleno{
+    width: 50px;
+    height: 55px;
+    background-color: rgb(113, 112, 112);
+    font-weight: bold;
 }

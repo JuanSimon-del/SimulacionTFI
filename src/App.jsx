@@ -1,8 +1,10 @@
 import { useState } from 'react'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import BarraDeNavegacion from './components/BarraDeNavegacion'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 import "./styles.css"
+import BarraDeNavegacion from './components/BarraDeNavegacion'
 import Simulacion from './components/Simulacion'
+import ResumenGeneral from './components/ResumenGeneral'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -10,7 +12,8 @@ function App() {
   return (
     <>
     <BarraDeNavegacion></BarraDeNavegacion>
-    <Simulacion></Simulacion>
+    {/* <Simulacion></Simulacion> */}
+    <ResumenGeneral></ResumenGeneral>
     </>
   )
 }
