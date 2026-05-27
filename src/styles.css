@@ -1,4 +1,4 @@
-* {
+body {
   font-family: "Elms Sans", sans-serif;
   background-color: #2e2e2e;
   color: white;
@@ -44,7 +44,7 @@
 }
 
 .input{
-    background-color: gray;
+  background-color: transparent;
 }
 
 .contenedor-informe-general{
@@ -62,4 +62,11 @@
     height: 55px;
     background-color: rgb(113, 112, 112);
     font-weight: bold;
+}
+
+.cards,
+h4,
+i {
+  color: white;
+  background-color: rgb(42, 37, 37);
 }

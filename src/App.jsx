@@ -5,6 +5,8 @@ import "./styles.css"
 import BarraDeNavegacion from './components/BarraDeNavegacion'
 import Simulacion from './components/Simulacion'
 import ResumenGeneral from './components/ResumenGeneral'
+import Informe from './components/Informe';
+import SideBar from './components/SideBar';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -13,7 +15,8 @@ function App() {
     <>
     <BarraDeNavegacion></BarraDeNavegacion>
     {/* <Simulacion></Simulacion> */}
-    <ResumenGeneral></ResumenGeneral>
+    {/* <Informe></Informe> */}
+    <SideBar></SideBar>
     </>
   )
 }
