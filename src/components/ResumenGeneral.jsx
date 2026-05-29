@@ -9,14 +9,15 @@ function ResumenGeneral() {
 
   return (
     <>
-      <section className="p-5">
-        <Row className="g-4">
+      <section className="px-5">
+        <h3>Resumen General (Todas las Campañas)</h3>
+        <Row className="mt-1 g-4">
           <Col>
             <Card className="text-center h-100 border-success border-2 shadow-sm">
               <Card.Body className="cards">
                 <i className="bi bi-laptop text-info fs-1"></i>
                 <p className="fs-2">58</p>
-                <h4>Equipos ingresados</h4>
+                <h5>Equipos ingresados</h5>
               </Card.Body>
             </Card>
           </Col>
@@ -26,7 +27,7 @@ function ResumenGeneral() {
               <Card.Body className="cards">
                 <i className="bi bi-tools text-secondary fs-1"></i>
                 <p className="fs-2">58</p>
-                <h4>Equipos refuncionalizados</h4>
+                <h5>Equipos refuncionalizados</h5>
               </Card.Body>
             </Card>
           </Col>
@@ -36,7 +37,7 @@ function ResumenGeneral() {
               <Card.Body className="cards">
                 <i className="bi bi-recycle text-success fs-1"></i>
                 <p className="fs-2">58</p>
-                <h4>Equipos reciclados</h4>
+                <h5>Equipos reciclados</h5>
               </Card.Body>
             </Card>
           </Col>
@@ -46,7 +47,7 @@ function ResumenGeneral() {
               <Card.Body className="cards">
                 <i className="bi bi-currency-dollar text-warning fs-1"></i>
                 <p className="fs-2">58</p>
-                <h4>Ingresos Totales Generados</h4>
+                <h5>Ingresos Totales Generados</h5>
               </Card.Body>
             </Card>
           </Col>
@@ -54,17 +55,17 @@ function ResumenGeneral() {
       </section>
 
       <section className="px-5 d-flex flex-column">
-        <Row>
-          <h2>Materiales Recuperados (Total Acumulado)</h2>
+        <Row className="mt-5">
+          <h3>Materiales Recuperados (Total Acumulado)</h3>
         </Row>
 
-        <Row className="mt-4 g-4">
+        <Row className="mt-1 g-4">
           <Col>
             <Card className="text-center h-100 border-success border-2 shadow-sm">
               <Card.Body className="d-flex flex-column align-items-center cards">
-                <h4>Hierro</h4>
+                <h5 className="mt-3">Hierro</h5>
                 <div className="contorno d-flex align-items-center rounded-2 my-4">
-                  <div className="relleno mx-auto d-flex align-items-center justify-content-center fs-3">
+                  <div className="relleno mx-auto d-flex align-items-center justify-content-center fs-5">
                     Fe
                   </div>
                 </div>
@@ -75,9 +76,9 @@ function ResumenGeneral() {
           <Col>
             <Card className="text-center h-100 border-success border-2 shadow-sm">
               <Card.Body className="d-flex flex-column align-items-center cards">
-                <h4>Aluminio</h4>
+                <h5 className="mt-3">Aluminio</h5>
                 <div className="contorno d-flex align-items-center rounded-2 my-4">
-                  <div className="relleno mx-auto d-flex align-items-center justify-content-center fs-3">
+                  <div className="relleno mx-auto d-flex align-items-center justify-content-center fs-5">
                     Al
                   </div>
                 </div>
@@ -88,9 +89,9 @@ function ResumenGeneral() {
           <Col>
             <Card className="text-center h-100 border-success border-2 shadow-sm">
               <Card.Body className="d-flex flex-column align-items-center cards">
-                <h4>Cobre</h4>
+                <h5 className="mt-3">Cobre</h5>
                 <div className="contorno d-flex align-items-center rounded-2 my-4">
-                  <div className="relleno mx-auto d-flex align-items-center justify-content-center fs-3">
+                  <div className="relleno mx-auto d-flex align-items-center justify-content-center fs-5">
                     Cu
                   </div>
                 </div>
@@ -101,7 +102,7 @@ function ResumenGeneral() {
           <Col>
             <Card className="text-center h-100 border-success border-2 shadow-sm">
               <Card.Body className="d-flex flex-column align-items-center cards">
-                <h4>Plástico</h4>
+                <h5 className="mt-3">Plástico</h5>
                 <i
                   className="bi bi-cup-straw vasito-plastico"
                   style={{ fontSize: "70px" }}
@@ -113,7 +114,7 @@ function ResumenGeneral() {
           <Col>
             <Card className="text-center h-100 border-success border-2 shadow-sm">
               <Card.Body className="d-flex flex-column align-items-center cards">
-                <h4>Placas</h4>
+               <h5 className="mt-3">Placas</h5>
                 <i
                   className="bi bi-motherboard my-1"
                   style={{ fontSize: "70px" }}

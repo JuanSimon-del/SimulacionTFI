@@ -52,14 +52,14 @@ body {
 }
 
 .contorno{
-    width: 65px;
-    height: 70px;
+    width: 55px;
+    height: 60px;
     background-color: rgb(67, 67, 67);
 }
 
 .relleno{
-    width: 50px;
-    height: 55px;
+    width: 40px;
+    height: 45px;
     background-color: rgb(113, 112, 112);
     font-weight: bold;
 }
@@ -69,4 +69,5 @@ h4,
 i {
   color: white;
   background-color: rgb(42, 37, 37);
+  padding: 5px;
 }

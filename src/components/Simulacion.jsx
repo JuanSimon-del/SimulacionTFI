@@ -77,7 +77,7 @@ function Simulacion() {
           </div>
         </article>
       </section>
-      <section className="d-flex w-100 mt-5 justify-content-center">
+      <section className="d-flex w-100 my-5 justify-content-center">
         <input
           type="text"
           placeholder="Campañas a simular"

@@ -12,8 +12,8 @@ function SideBar() {
 
   return (
     <>
-      <Navbar className="bg-dark w-25 vh-100 align-items-start">
-        <section className="w-100 p-3">
+      <Navbar className="bg-dark w-25 min-vh-100 align-items-start">
+        <section className="w-100 p-4">
           <h3>Configuración Inicial</h3>
           <article className="my-4">
             <h5>Parámetros de la Simulación</h5>
@@ -22,14 +22,14 @@ function SideBar() {
                 <p className="my-auto">Cantidad de Campañas: </p>
               </Col>
               <Col>
-                <input type="text" placeholder="10" className="ms-3 w-50" />
+                <input type="text" placeholder="10" className="ms-3 w-50 text-center" />
               </Col>
             </Row>
           </article>
           <article className="mb-4">
             <h5>Distribución de Trabajadores</h5>
             {trabajadores.map((trabajador, index) => (
-              <Row key={index} className="d-flex align-items-center my-3">
+              <Row key={index} className="d-flex align-items-center my-4">
                 <Col>
                   <i className={`bi ${trabajador.icono} ${trabajador.color} ms-3`}></i>
                 </Col>
@@ -37,7 +37,7 @@ function SideBar() {
                   <p className="mb-0 ms-2">{trabajador.nombre}</p>
                 </Col>
                 <Col>
-                  <input type="text" className="me-2 w-100" />
+                  <input type="text" className="me-2 w-100 text-center" placeholder="3" />
                 </Col>
               </Row>
             ))}
