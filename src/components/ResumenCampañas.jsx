@@ -7,7 +7,7 @@ function ResumenCampañas() {
       <section className="mx-5">
         <h3 className="mt-5">Campaña 1</h3>
         <Row>
-          <Col lg={5}>
+          <Col md={6}>
             <h5 className="my-4">Ingreso de dispositivos</h5>
             <Table striped bordered hover variant="secondary">
               <tbody>
@@ -26,7 +26,7 @@ function ResumenCampañas() {
               </tbody>
             </Table>
           </Col>
-          <Col lg={5}>
+          <Col md={6}>
             <h5 className="my-4">Resultado del Procesamiento</h5>
             <Table striped bordered hover variant="secondary">
               <tbody>
@@ -45,8 +45,54 @@ function ResumenCampañas() {
               </tbody>
             </Table>
           </Col>
-          <Col className="d-flex flex-column justify-content-end align-items-center">
-            <img src="../public/camion.png" alt="Camión" width={150} />
+        </Row>
+        <Row>
+          <Col>
+            <h5 className="my-4">Estado Operativo Durante la Campaña</h5>
+            <Table striped bordered hover variant="secondary">
+              <thead>
+                <tr>
+                  <th>Etapa</th>
+                  <th>Tiempo Total</th>
+                  <th>Estado</th>
+                  <th>Detalle</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td className="w-25">Inspección Visual</td>
+                  <td>18h</td>
+                  <td className="text-success">
+                    <b>Flujo Normal</b>
+                  </td>
+                  <td>Cola promedio: 2 equipos</td>
+                </tr>
+                <tr>
+                  <td className="w-25">Desarme y Testeo</td>
+                  <td>14h</td>
+                  <td className="text-danger">
+                    <b>Cuello de Botella</b>
+                  </td>
+                  <td>Cola promedio: 2 equipos</td>
+                </tr>
+                <tr>
+                  <td className="w-25">Separación de Materiales</td>
+                  <td>15h</td>
+                  <td className="text-secondary">
+                    <b>Congestión Media</b>
+                  </td>
+                  <td>Cola promedio: 2 equipos</td>
+                </tr>
+                <tr>
+                  <td className="w-25">Clasificación de Plásticos</td>
+                  <td>12h</td>
+                  <td className="text-success">
+                    <b>Flujo Normal</b>
+                  </td>
+                  <td>Cola promedio: 2 equipos</td>
+                </tr>
+              </tbody>
+            </Table>
           </Col>
         </Row>
       </section>
