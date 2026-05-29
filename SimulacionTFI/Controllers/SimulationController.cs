@@ -81,7 +81,7 @@ namespace SimulacionTFI.API.Controllers
             response.Summary.PlasticoAltaCalidad = Math.Round(response.Summary.PlasticoAltaCalidad, 2);
             response.Summary.PlasticoMediaCalidad = Math.Round(response.Summary.PlasticoMediaCalidad, 2);
             response.Summary.PlasticoBajaCalidad = Math.Round(response.Summary.PlasticoBajaCalidad, 2);
-
+            
             return Ok(response);
         }
     }
