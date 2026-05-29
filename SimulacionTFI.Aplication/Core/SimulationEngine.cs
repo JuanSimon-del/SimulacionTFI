@@ -238,21 +238,9 @@ namespace SimulacionTFI.Aplication.Core
 
         private void ProcessFinDeDia(Event e)
         {
-            // Buscamos la etapa 4 completa y se la pasamos al método
             var stage4 = _stages.Find(s => s.Id == 4);
             ProcessPlasticClassification(stage4);
 
-            // --- REGISTRO DEL REPORTE DIARIO ---
-            var daily = new DailyStats
-            {
-                Day = (int)Math.Ceiling(CurrentTime),
-                ProcessedCount = _results.TotalDevicesProcessed,
-                // Calculamos la ocupación promediando las 4 etapas
-                OcupacionPromedio = _stages.Average(s => s.WorkersCount > 0
-                    ? (s.TotalBusyTime / (CurrentTime * s.WorkersCount))
-                    : 0)
-            };
-            _results.DailyReport.Add(daily);
 
             if (CurrentTime + 1.0 <= TotalDuration)
             {

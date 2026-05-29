@@ -8,13 +8,6 @@ namespace SimulacionTFI.Aplication.Core
 {
     // El reporte final que recibirá el Frontend
 
-    public class DailyStats
-    {
-        public int Day { get; set; }
-        public int ProcessedCount { get; set; }
-        public double OcupacionPromedio { get; set; }
-    }
-
 
     public class SimulationResults
     {
@@ -38,6 +31,6 @@ namespace SimulacionTFI.Aplication.Core
 
         public int DispositivosNoProcesados => (BacklogInicial + TotalDevicesArrived) - TotalDevicesProcessed;
 
-        public List<DailyStats> DailyReport { get; set; } = new List<DailyStats>();
+        public double GananciasTotales { get; set; }
     }
 }

@@ -61,15 +61,20 @@ namespace SimulacionTFI.API.Controllers
                     stage.KgEnCola = Math.Round(stage.KgEnCola, 2);
                 }
 
-                foreach (var day in result.DailyReport)
-                {
-                    day.OcupacionPromedio = Math.Round(day.OcupacionPromedio, 2);
-                }
 
                 foreach (var stage in result.Stages)
                 {
                     stage.TotalBusyTime = Math.Round(stage.TotalBusyTime, 2);
                 }
+
+                result.GananciasTotales =
+                    (result.CobreRecuperadoKg * 30000) +
+                    (result.AluminioRecuperadoKg * 5500) +
+                    (result.HierroRecuperadoKg * 33625) +
+                    (result.PlasticoAltaCalidad * 340) +
+                    (result.PlasticoMediaCalidad * 280) +
+                    (result.PlasticoBajaCalidad * 220) +
+                    (result.RefurbishedCount * 100000);
 
                 // Guardamos los resultados individuales en la lista
                 response.CampaignDetails.Add(result);
@@ -93,6 +98,16 @@ namespace SimulacionTFI.API.Controllers
                 response.Summary.PlasticoMediaCalidad += result.PlasticoMediaCalidad;
                 response.Summary.PlasticoBajaCalidad += result.PlasticoBajaCalidad;
                 response.Summary.CantidadPlacasRecuperadas += result.CantidadPlacasRecuperadas;
+
+                response.Summary.GananciasTotales =
+                (response.Summary.CobreRecuperadoKg * 30000) +
+                (response.Summary.AluminioRecuperadoKg * 5500) +
+                (response.Summary.HierroRecuperadoKg * 33625) +
+                (response.Summary.PlasticoAltaCalidad * 340) +
+                (response.Summary.PlasticoMediaCalidad * 280) +
+                (response.Summary.PlasticoBajaCalidad * 220) +
+                (response.Summary.RefurbishedCount * 100000);
+
             }
 
             // Opcional por seguridad: Redondeamos el resumen global al final 
@@ -103,6 +118,7 @@ namespace SimulacionTFI.API.Controllers
             response.Summary.PlasticoAltaCalidad = Math.Round(response.Summary.PlasticoAltaCalidad, 2);
             response.Summary.PlasticoMediaCalidad = Math.Round(response.Summary.PlasticoMediaCalidad, 2);
             response.Summary.PlasticoBajaCalidad = Math.Round(response.Summary.PlasticoBajaCalidad, 2);
+            response.Summary.GananciasTotales = Math.Round(response.Summary.GananciasTotales, 2);
 
             return Ok(response);
         }
