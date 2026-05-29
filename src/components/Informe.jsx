@@ -3,7 +3,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import SideBar from "./SideBar";
 import ResumenGeneral from "./ResumenGeneral";
 import ResumenCampañas from "./ResumenCampañas";
-import Footer from "./Footer";
 
 function Informe() {
   const [count, setCount] = useState(0);
@@ -17,7 +16,6 @@ function Informe() {
             <ResumenGeneral></ResumenGeneral>
             <ResumenCampañas></ResumenCampañas>
           </main>
-          <Footer></Footer>
         </div>
       </div>
     </>

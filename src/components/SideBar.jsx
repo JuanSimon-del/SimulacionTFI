@@ -12,12 +12,12 @@ function SideBar() {
 
   return (
     <>
-      <Navbar className="bg-dark w-25 min-vh-100 align-items-start sidebar-fixed">
+      <Navbar className="bg-dark w-25 min-vh-100 align-items-start sidebar-fixed py-4 px-3">
         <section className="w-100 p-4">
           <h3>Configuración Inicial</h3>
           <article className="my-4">
             <h5>Parámetros de la Simulación</h5>
-            <Row className="d-flex my-3">
+            <Row className="d-flex my-4">
               <Col lg={8}>
                 <p className="my-auto">Cantidad de Campañas: </p>
               </Col>
@@ -26,7 +26,7 @@ function SideBar() {
               </Col>
             </Row>
           </article>
-          <article className="mb-4">
+          <article className="my-4">
             <h5>Distribución de Trabajadores</h5>
             {trabajadores.map((trabajador, index) => (
               <Row key={index} className="d-flex align-items-center my-4">
@@ -43,10 +43,10 @@ function SideBar() {
             ))}
           </article>
           <article>
-            <h5 className="my-3">Resultados por Campaña (3)</h5>
-            <Button className="w-100 btn-secondary mb-2">Campaña 1</Button>
-            <Button className="w-100 btn-secondary mb-2">Campaña 2</Button>
-            <Button className="w-100 btn-secondary mb-2">Campaña 3</Button>
+            <h5 className="my-4">Resultados por Campaña (3)</h5>
+            <Button className="w-100 btn-secondary mb-3">Campaña 1</Button>
+            <Button className="w-100 btn-secondary mb-3">Campaña 2</Button>
+            <Button className="w-100 btn-secondary mb-3">Campaña 3</Button>
           </article>
         </section>
       </Navbar>

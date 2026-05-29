@@ -1,8 +1,15 @@
 import Container from "react-bootstrap/Container";
 import MiDropdown from "./MiDropdown";
 import DropdownTrabajadores from "./DropdownTrabajadores";
+import { useNavigate } from "react-router-dom";
 
 function Simulacion() {
+  const navigate = useNavigate();
+
+  function handleVerInforme() {
+    navigate("/informe");
+  }
+
   return (
     <Container
       expand="lg"
@@ -85,6 +92,12 @@ function Simulacion() {
         />
         <MiDropdown></MiDropdown>
         <button className="btn btn-success ms-3 px-5">Simular</button>
+        <button
+          className="btn btn-outline-light ms-3 px-4"
+          onClick={handleVerInforme}
+        >
+          Ver Informe
+        </button>
       </section>
     </Container>
   );

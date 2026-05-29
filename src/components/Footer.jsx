@@ -2,11 +2,11 @@ import { Container, Row, Col } from "react-bootstrap";
 
 function Footer() {
   return (
-    <footer className="bg-success text-light py-4 mt-auto border-top border-secondary">
+    <footer className="bg-success text-light py-4 border-top border-secondary footer-fixed-width">
       <Container>
         <Row>
-          <Col md={4} className="mb-4 mb-md-0">
-            <div className="mx-auto">
+          <Col md={4} className="mb-4">
+            <div className="mx-auto footer-left-content ms-2">
               <h5 className="mb-3">Trabajo Final Integrador</h5>
               <p className="mb-1">Materia: Simulación</p>
               <p className="mb-1">Comisión: 4K1</p>

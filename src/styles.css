@@ -1,25 +1,37 @@
+html, body, #root {
+  height: 100%;
+}
+
 body {
   font-family: "Elms Sans", sans-serif;
   background-color: #2e2e2e;
   color: white;
   margin: 0;
   padding: 0;
+  overflow: hidden; /* prevent body scroll, use .app-content instead */
 }
 
 .navbar {
   background-color: black;
-  z-index: 1001;
-  position: relative;
+  z-index: 1100;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.app-content {
+  margin-top: 56px; /* height of navbar */
+  height: calc(100vh - 56px);
+  overflow-y: auto; /* single page scrollbar */
 }
 
 .informe-container {
-  min-height: calc(100vh - 56px);
+  /* no fixed height here; content will flow inside .app-content */
 }
 
 .informe-content {
-  overflow-y: auto;
-  max-height: calc(100vh - 56px);
-  margin-left: 25%;
+  margin-left: 25%; /* leave space for fixed sidebar */
 }
 
 .informe-main {
@@ -29,10 +41,21 @@ body {
 .sidebar-fixed {
   position: fixed;
   left: 0;
-  top: 56px;
+  top: 56px; /* below navbar */
   height: calc(100vh - 56px);
-  overflow-y: auto;
   z-index: 1000;
+  width: 25%;
+  overflow: auto; /* allow sidebar internal scroll when content grows */
+}
+
+/* When the app shows the Informe (sidebar present), offset the footer and full-width content */
+.with-sidebar footer {
+  margin-left: 25%;
+}
+
+/* Ensure footer has no extra bottom margin and uses full width when no sidebar */
+.footer-fixed-width {
+  margin-bottom: 0;
 }
 
 .logo {

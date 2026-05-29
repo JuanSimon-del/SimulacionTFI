@@ -9,7 +9,7 @@ function ResumenGeneral() {
 
   return (
     <>
-      <section className="px-5">
+      <section className="px-5 my-3">
         <h3>Resumen General (Todas las Campañas)</h3>
         <Row className="mt-1 g-4">
           <Col>
