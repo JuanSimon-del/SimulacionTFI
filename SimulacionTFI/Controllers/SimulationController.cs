@@ -27,13 +27,25 @@ namespace SimulacionTFI.API.Controllers
             // Inicializamos el resumen global con ceros
             response.Summary = new SimulationResults();
 
+            // --- AQUÍ VA LA VARIABLE, JUSTO ANTES DEL BUCLE ---
+            int backlogPendiente = 0;
+
             for (int i = 0; i < request.TotalCampaigns; i++)
             {
-                // Creamos una nueva instancia del motor para cada campaña
+                // 1. Creamos una nueva instancia del motor para cada campaña
                 var engine = new SimulationEngine(1, request.WorkersPerStage, _generator);
 
-                // Corremos solo por 7 días
+                // --- 2. ¡EL PASO MÁGICO! Inyectamos los que sobraron de la campaña anterior ---
+                if (backlogPendiente > 0)
+                {
+                    engine.SetBacklog(backlogPendiente);
+                }
+
+                // 3. Corremos solo por 7 días
                 var result = engine.Run(7.0);
+
+                // --- 4. Actualizamos el backlog para la SIGUIENTE campaña ---
+                backlogPendiente = result.DispositivosNoProcesados;
 
                 // --- CORRECCIÓN 1: REDONDEO DE DECIMALES ---
                 // Redondeamos a 2 decimales los resultados de esta campaña antes de guardarlos
@@ -47,6 +59,16 @@ namespace SimulacionTFI.API.Controllers
                 foreach (var stage in result.Stages)
                 {
                     stage.KgEnCola = Math.Round(stage.KgEnCola, 2);
+                }
+
+                foreach (var day in result.DailyReport)
+                {
+                    day.OcupacionPromedio = Math.Round(day.OcupacionPromedio, 2);
+                }
+
+                foreach (var stage in result.Stages)
+                {
+                    stage.TotalBusyTime = Math.Round(stage.TotalBusyTime, 2);
                 }
 
                 // Guardamos los resultados individuales en la lista
@@ -66,7 +88,7 @@ namespace SimulacionTFI.API.Controllers
                 // ¡AGREGADO! Sumamos los kilos de materiales recuperados al Summary
                 response.Summary.AluminioRecuperadoKg += result.AluminioRecuperadoKg;
                 response.Summary.CobreRecuperadoKg += result.CobreRecuperadoKg;
-                response.Summary.HierroRecuperadoKg += result.HierroRecuperadoKg; 
+                response.Summary.HierroRecuperadoKg += result.HierroRecuperadoKg;
                 response.Summary.PlasticoAltaCalidad += result.PlasticoAltaCalidad;
                 response.Summary.PlasticoMediaCalidad += result.PlasticoMediaCalidad;
                 response.Summary.PlasticoBajaCalidad += result.PlasticoBajaCalidad;
@@ -81,7 +103,7 @@ namespace SimulacionTFI.API.Controllers
             response.Summary.PlasticoAltaCalidad = Math.Round(response.Summary.PlasticoAltaCalidad, 2);
             response.Summary.PlasticoMediaCalidad = Math.Round(response.Summary.PlasticoMediaCalidad, 2);
             response.Summary.PlasticoBajaCalidad = Math.Round(response.Summary.PlasticoBajaCalidad, 2);
-            
+
             return Ok(response);
         }
     }

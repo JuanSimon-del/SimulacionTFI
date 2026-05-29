@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace SimulacionTFI.Aplication.Core
 {
@@ -15,5 +11,19 @@ namespace SimulacionTFI.Aplication.Core
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public double KgEnCola { get; set; }
+
+        // --- ESTO ES LO QUE FALTABA PARA EL ERROR DE LA LÍNEA 57 ---
+        public double TotalBusyTime { get; set; }
+
+        public double CalcularUtilizacion(int workersCount, double totalDurationDays)
+        {
+            // ¡QUITAMOS EL * 8.0 PORQUE TODO SE MIDE EN DÍAS!
+            double tiempoTotalDisponible = totalDurationDays * workersCount;
+            if (tiempoTotalDisponible <= 0) return 0;
+
+            return (TotalBusyTime / tiempoTotalDisponible) * 100; // Esto te dará de 0 a 100%
+        }
     }
 }
+
+    

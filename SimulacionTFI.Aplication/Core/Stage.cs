@@ -10,6 +10,10 @@ namespace SimulacionTFI.Domain.Entities
         public int WorkersCount { get; set; }
         public int MaxQueueSize { get; private set; } = 0;
 
+        public double TotalBusyTime { get; private set; } = 0;
+
+        private double _lastServiceStartTime;
+
         private int _busyWorkers = 0;
 
         // Colas separadas para dispositivos y materiales
@@ -49,18 +53,28 @@ namespace SimulacionTFI.Domain.Entities
 
         public bool IsAvailable() => _devicesInService.Count < WorkersCount;
 
-        public void StartService(Device device)
+        public void StartService(Device device, double currentTime)
         {
             _busyWorkers++;
             _devicesInService.Add(device);
+            _lastServiceStartTime = currentTime; // Registramos el tiempo de inicio
         }
 
-        public Device EndService()
+        public Device EndService(double currentTime)
         {
             if (_devicesInService.Count > 0)
             {
+                // 1. Guardamos temporalmente el equipo que está terminando
                 var dev = _devicesInService[0];
+
+                // 2. Sumamos al total el tiempo que estuvo este equipo en servicio
+                TotalBusyTime += (currentTime - _lastServiceStartTime);
+
+                // 3. Lo sacamos de la lista de "en proceso" y liberamos al trabajador
                 _devicesInService.RemoveAt(0);
+                _busyWorkers--;
+
+                // 4. DEVOLVEMOS el equipo al SimulationEngine
                 return dev;
             }
             return null;
@@ -88,24 +102,34 @@ namespace SimulacionTFI.Domain.Entities
         }
 
         // 1. Inicia el servicio recibiendo el material específico
-        public void StartServiceMaterial(Material material)
+        public void StartServiceMaterial(Material material, double currentTime)
         {
             _busyWorkers++; // Incrementamos el contador de ocupados
             _materialsInService.Add(material); // Guardamos el material que estamos procesando
+            _lastServiceStartTime = currentTime;
         }
 
         // Este método permite sacar un material de la cola para procesarlo en la Etapa 3
-        public Material EndServiceMaterial()
+        public Material EndServiceMaterial(double currentTime)
         {
             if (_busyWorkers > 0) _busyWorkers--;
 
             if (_materialsInService.Count > 0)
             {
+                // ¡AQUÍ ESTÁ LA LÍNEA QUE FALTABA!
+                TotalBusyTime += (currentTime - _lastServiceStartTime);
+
                 var mat = _materialsInService[0];
                 _materialsInService.RemoveAt(0);
                 return mat;
             }
             return null;
         }
+
+        public void AddBusyTime(double additionalTimeInDays)
+        {
+            TotalBusyTime += additionalTimeInDays;
+        }
     }
+
 }

@@ -7,6 +7,15 @@ using System.Threading.Tasks;
 namespace SimulacionTFI.Aplication.Core
 {
     // El reporte final que recibirá el Frontend
+
+    public class DailyStats
+    {
+        public int Day { get; set; }
+        public int ProcessedCount { get; set; }
+        public double OcupacionPromedio { get; set; }
+    }
+
+
     public class SimulationResults
     {
         public int TotalDevicesArrived { get; set; }
@@ -24,5 +33,11 @@ namespace SimulacionTFI.Aplication.Core
         public double PlasticoBajaCalidad { get; set; }
 
         public int CantidadPlacasRecuperadas { get; set; }
+
+        public int BacklogInicial { get; set; }
+
+        public int DispositivosNoProcesados => (BacklogInicial + TotalDevicesArrived) - TotalDevicesProcessed;
+
+        public List<DailyStats> DailyReport { get; set; } = new List<DailyStats>();
     }
 }

@@ -1,14 +1,16 @@
 ﻿using SimulacionTFI.Application.Extensions;
 using SimulacionTFI.Domain.Entities;
-using SimulacionTFI.Domain.Interfaces; // Solo conoces la interfaz del dominio
+using SimulacionTFI.Domain.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
 namespace SimulacionTFI.Aplication.Core
 {
     public class SimulationEngine
     {
-        private readonly IGenerator _generator; // Solo dejamos este
+        private readonly IGenerator _generator;
         private EventCalendar _calendar;
         private List<Stage> _stages;
         private SimulationResults _results;
@@ -18,7 +20,7 @@ namespace SimulacionTFI.Aplication.Core
 
         public SimulationEngine(int totalCampaigns, List<int> workersPerStage, IGenerator generator)
         {
-            _generator = generator; // Asignamos la interfaz inyectada
+            _generator = generator;
             _calendar = new EventCalendar();
             _stages = new List<Stage>();
 
@@ -30,7 +32,6 @@ namespace SimulacionTFI.Aplication.Core
             _stages.Add(new Stage(3, "Separación", workersPerStage[2]));
             _stages.Add(new Stage(4, "Clasificación", workersPerStage[3]));
 
-            // Asegúrate de que los nombres aquí coincidan EXACTAMENTE con los que buscas luego
             _results = new SimulationResults();
             _results.Stages.Add(new StageStats { StageName = "Inspección", ProcessedCount = 0, MaxQueueSize = 0 });
             _results.Stages.Add(new StageStats { StageName = "Desarme y Testeo", ProcessedCount = 0, MaxQueueSize = 0 });
@@ -38,29 +39,27 @@ namespace SimulacionTFI.Aplication.Core
             _results.Stages.Add(new StageStats { StageName = "Clasificación", ProcessedCount = 0, MaxQueueSize = 0 });
         }
 
-        // Cambia el método Run para que reciba la duración de la campaña (7 días)
         public SimulationResults Run(double duration)
         {
-            TotalDuration = duration; // Definimos que esta ejecución dura solo una campaña
+            TotalDuration = duration;
             CurrentTime = 0;
 
             // 1. FORZAMOS la primera llegada en el tiempo 0
             _calendar.AddEvent(new Event(0, EventType.Llegada, 1));
 
-            // 2. AGENDAMOS el primer Fin de Día (en el tiempo 1.0, que equivale a 1 día de 8 horas)
+            // 2. AGENDAMOS el primer Fin de Día (en el tiempo 1.0)
             _calendar.AddEvent(new Event(1.0, EventType.FinDeDia, 4));
 
             while (_calendar.HasEvents() && CurrentTime < TotalDuration)
             {
                 Event currentEvent = _calendar.GetNextEvent();
-                System.Console.WriteLine($"Procesando evento {currentEvent.Type} en tiempo {currentEvent.EventTime}");
+                Console.WriteLine($"Procesando evento {currentEvent.Type} en tiempo {currentEvent.EventTime}");
                 CurrentTime = currentEvent.EventTime;
 
                 switch (currentEvent.Type)
                 {
                     case EventType.Llegada: ProcessArrival(currentEvent); break;
                     case EventType.FinDeServicio: ProcessDeparture(currentEvent); break;
-                    // 3. AGREGAMOS EL CASO PARA EL FIN DE DÍA
                     case EventType.FinDeDia: ProcessFinDeDia(currentEvent); break;
                 }
             }
@@ -70,8 +69,8 @@ namespace SimulacionTFI.Aplication.Core
                 var stats = _results.Stages.FirstOrDefault(s => s.StageName == stage.Name);
                 if (stats != null)
                 {
-                    // Pasamos el récord de la etapa a los resultados del JSON
                     stats.MaxQueueSize = stage.MaxQueueSize;
+                    stats.TotalBusyTime = stage.TotalBusyTime;
                 }
             }
 
@@ -80,14 +79,12 @@ namespace SimulacionTFI.Aplication.Core
 
         private Device CreateRandomDevice()
         {
-            // 65% Laptop, 35% Desktop
             double prob = _generator.SiguienteUniforme();
             var type = (prob < 0.65) ? DeviceType.Laptop : DeviceType.Desktop;
 
-            // Peso: Laptop (2.25 +- 0.75), Desktop (8 +- 2)
             double weight = (type == DeviceType.Laptop)
-                ? 1.5 + (_generator.SiguienteUniforme() * 1.5) // Rango [1.5, 3]
-                : 6.0 + (_generator.SiguienteUniforme() * 4.0); // Rango [6, 10]
+                ? 1.5 + (_generator.SiguienteUniforme() * 1.5)
+                : 6.0 + (_generator.SiguienteUniforme() * 4.0);
 
             return new Device(weight, type);
         }
@@ -100,35 +97,32 @@ namespace SimulacionTFI.Aplication.Core
             var stageStats = _results.Stages.FirstOrDefault(s => s.StageName == currentStage.Name);
             if (stageStats == null) return;
 
-            // 1. OBTENER EL ELEMENTO QUE TERMINÓ Y LIBERAR AL TRABAJADOR
             Device finishedDevice = null;
             Material finishedMaterial = null;
 
             if (e.StageId == 3)
             {
-                finishedMaterial = currentStage.EndServiceMaterial();
+                finishedMaterial = currentStage.EndServiceMaterial(CurrentTime);
             }
             else
             {
-                finishedDevice = currentStage.EndService();
+                finishedDevice = currentStage.EndService(CurrentTime);
             }
 
-            // 2. ACTUALIZAR ESTADÍSTICAS GENERALES
             stageStats.ProcessedCount++;
             if (e.StageId == 1)
             {
                 _results.TotalDevicesProcessed++;
             }
 
-            // 3. RUTEO DEL ELEMENTO QUE ACABA DE TERMINAR
-            if (e.StageId == 1 && finishedDevice != null) // Inspección
+            if (e.StageId == 1 && finishedDevice != null)
             {
                 if (_generator.SiguienteUniforme() < 0.15)
                     _results.RefurbishedCount++;
                 else
                     TransferEntity(e.StageId, 2, finishedDevice);
             }
-            else if (e.StageId == 2 && finishedDevice != null) // Desarme
+            else if (e.StageId == 2 && finishedDevice != null)
             {
                 _results.RecycledCount++;
                 _results.CantidadPlacasRecuperadas++;
@@ -136,26 +130,24 @@ namespace SimulacionTFI.Aplication.Core
                 var materiales = finishedDevice.Desarmar();
                 var stage3 = _stages.Find(s => s.Id == 3);
 
-                // Agregamos todo a la cola de la Etapa 3
                 foreach (var mat in materiales)
                 {
                     stage3.AddMaterialToQueue(mat);
                 }
 
-                // IMPORTANTE: Despertamos a TODOS los trabajadores libres de la Etapa 3
                 while (stage3.IsAvailable() && stage3.HasMaterialQueue())
                 {
                     var nextMat = stage3.TakeMaterialFromQueue();
                     if (nextMat != null)
                     {
-                        stage3.StartServiceMaterial(nextMat);
+                        stage3.StartServiceMaterial(nextMat, CurrentTime);
                         double capacidadPorHora = 15.0 + (_generator.SiguienteUniforme() * 15.0);
                         double horas = nextMat.weightMat / capacidadPorHora;
                         _calendar.AddEvent(new Event(CurrentTime + (horas / 8.0), EventType.FinDeServicio, 3));
                     }
                 }
             }
-            else if (e.StageId == 3 && finishedMaterial != null) // Separación
+            else if (e.StageId == 3 && finishedMaterial != null)
             {
                 if (finishedMaterial.typeMat == MaterialType.Plastic)
                 {
@@ -166,12 +158,10 @@ namespace SimulacionTFI.Aplication.Core
                     _results.AluminioRecuperadoKg += finishedMaterial.weightMat;
                 else if (finishedMaterial.typeMat == MaterialType.Copper)
                     _results.CobreRecuperadoKg += finishedMaterial.weightMat;
-                else if (finishedMaterial.typeMat == MaterialType.Iron) // ¡AGREGADO!
+                else if (finishedMaterial.typeMat == MaterialType.Iron)
                     _results.HierroRecuperadoKg += finishedMaterial.weightMat;
             }
 
-            // 4. INICIAR NUEVO SERVICIO EN LA ETAPA ACTUAL (Avanzar la cola)
-            // Usamos 'while' para asegurar que si hay 3 trabajadores libres y 5 en cola, los 3 arranquen de inmediato.
             while (currentStage.IsAvailable())
             {
                 if (e.StageId < 3 && currentStage.HasQueue())
@@ -179,7 +169,7 @@ namespace SimulacionTFI.Aplication.Core
                     var nextDevice = currentStage.TakeFromQueue();
                     if (nextDevice != null)
                     {
-                        currentStage.StartService(nextDevice);
+                        currentStage.StartService(nextDevice, CurrentTime);
                         double serviceTime = 0.1 + (_generator.SiguienteUniforme() * 0.2);
                         _calendar.AddEvent(new Event(CurrentTime + serviceTime, EventType.FinDeServicio, currentStage.Id));
                     }
@@ -189,7 +179,7 @@ namespace SimulacionTFI.Aplication.Core
                     var nextMat = currentStage.TakeMaterialFromQueue();
                     if (nextMat != null)
                     {
-                        currentStage.StartServiceMaterial(nextMat);
+                        currentStage.StartServiceMaterial(nextMat, CurrentTime);
                         double capacidadPorHora = 15.0 + (_generator.SiguienteUniforme() * 15.0);
                         double horas = nextMat.weightMat / capacidadPorHora;
                         _calendar.AddEvent(new Event(CurrentTime + (horas / 8.0), EventType.FinDeServicio, 3));
@@ -197,44 +187,73 @@ namespace SimulacionTFI.Aplication.Core
                 }
                 else
                 {
-                    break; // Si no hay cola o no hay trabajadores libres, salimos del bucle
+                    break;
                 }
             }
         }
 
-        private void ProcessPlasticClassification(int trabajadoresEtapa4)
+        private void ProcessPlasticClassification(Stage stage4)
         {
-            // Capacidad diaria total de la etapa
-            double capacidadDiaria = trabajadoresEtapa4 * 120.0;
+            int trabajadores = stage4.WorkersCount;
+            if (trabajadores == 0) return;
 
-            // Obtenemos los kilos acumulados en la etapa 3 (Separación) que pasaron a etapa 4
+            // 1. Capacidad por hora por trabajador (entre 15 y 30 kg/h, igual que Separación)
+            double capacidadPorHora = 15.0 + (_generator.SiguienteUniforme() * 15.0);
+
+            // Capacidad máxima de todo el equipo en 1 día (8 horas)
+            double capacidadDiaria = trabajadores * capacidadPorHora * 8.0;
+
             var stage4Stats = _results.Stages.Find(s => s.StageName == "Clasificación");
 
-            // Cantidad a procesar hoy (lo que haya en cola o la capacidad máxima)
+            // 2. Procesamos lo que hay en cola, o el tope de su capacidad diaria
             double aProcesar = Math.Min(stage4Stats.KgEnCola, capacidadDiaria);
 
-            // Clasificación por calidades
-            double alta = aProcesar * 0.20;
-            double media = aProcesar * 0.50;
-            double baja = aProcesar * 0.30;
+            if (aProcesar > 0)
+            {
+                // 3. CÁLCULO DE TIEMPO OCUPADO
+                // Tiempo en horas que tardó todo el equipo trabajando en paralelo
+                double horasOcupadas = aProcesar / (capacidadPorHora * trabajadores);
 
-            // Actualizamos los resultados
-            stage4Stats.ProcessedCount += (int)aProcesar; // Si prefieres contar en Kg
-            stage4Stats.KgEnCola -= aProcesar;
+                // Lo pasamos a la unidad de simulación (1 día = 8 horas)
+                double diasOcupados = horasOcupadas / 8.0;
 
-            // Aquí guardas los totales de plástico recuperado por calidad
-            _results.PlasticoAltaCalidad += alta;
-            _results.PlasticoMediaCalidad += media;
-            _results.PlasticoBajaCalidad += baja;
+                // Sumamos el esfuerzo total (Días-Hombre) al acumulador de la etapa
+                stage4.AddBusyTime(diasOcupados * trabajadores);
+
+                // 4. Clasificación por calidades
+                double alta = aProcesar * 0.20;
+                double media = aProcesar * 0.50;
+                double baja = aProcesar * 0.30;
+
+                // Actualizamos los resultados
+                stage4Stats.ProcessedCount += (int)aProcesar;
+                stage4Stats.KgEnCola -= aProcesar;
+
+                _results.PlasticoAltaCalidad += alta;
+                _results.PlasticoMediaCalidad += media;
+                _results.PlasticoBajaCalidad += baja;
+            }
         }
+
 
         private void ProcessFinDeDia(Event e)
         {
-            // Ejecutamos la lógica de clasificación de plásticos
-            int trabajadoresEtapa4 = _stages.Find(s => s.Id == 4).WorkersCount;
-            ProcessPlasticClassification(trabajadoresEtapa4);
+            // Buscamos la etapa 4 completa y se la pasamos al método
+            var stage4 = _stages.Find(s => s.Id == 4);
+            ProcessPlasticClassification(stage4);
 
-            // Agendamos el próximo fin de día (sumamos 1 día al tiempo actual)
+            // --- REGISTRO DEL REPORTE DIARIO ---
+            var daily = new DailyStats
+            {
+                Day = (int)Math.Ceiling(CurrentTime),
+                ProcessedCount = _results.TotalDevicesProcessed,
+                // Calculamos la ocupación promediando las 4 etapas
+                OcupacionPromedio = _stages.Average(s => s.WorkersCount > 0
+                    ? (s.TotalBusyTime / (CurrentTime * s.WorkersCount))
+                    : 0)
+            };
+            _results.DailyReport.Add(daily);
+
             if (CurrentTime + 1.0 <= TotalDuration)
             {
                 _calendar.AddEvent(new Event(CurrentTime + 1.0, EventType.FinDeDia, 4));
@@ -244,7 +263,6 @@ namespace SimulacionTFI.Aplication.Core
         private void ProcessArrival(Event e)
         {
             int cantidadLlegada = (int)Math.Round(_generator.NextNormal(90, 10));
-
             _results.TotalDevicesArrived += cantidadLlegada;
 
             var stage = _stages.Find(s => s.Id == e.StageId);
@@ -260,8 +278,7 @@ namespace SimulacionTFI.Aplication.Core
 
                 if (stage.IsAvailable())
                 {
-                    stage.StartService(device);
-                    // Inspección: 3 laptops/hora (0.33h) o 2 desktops/hora (0.5h)
+                    stage.StartService(device, CurrentTime);
                     double serviceTime = (device.typeDev == DeviceType.Laptop) ? 0.33 : 0.5;
                     _calendar.AddEvent(new Event(CurrentTime + (serviceTime / 8.0), EventType.FinDeServicio, stage.Id));
                 }
@@ -274,40 +291,43 @@ namespace SimulacionTFI.Aplication.Core
 
         private void ScheduleNextArrival()
         {
-            // Según tu contexto: llegan equipos aproximadamente cada 15 días.
-            // Usamos el generador para darle variabilidad a ese número (ej: entre 10 y 20 días)
             double timeToNextArrival = 7.0;
             _calendar.AddEvent(new Event(CurrentTime + timeToNextArrival, EventType.Llegada, 1));
         }
 
-        
         private void TransferEntity(int currentStageId, int nextStageId, Device device)
         {
-            // 1. Buscamos la etapa destino
             var nextStage = _stages.Find(s => s.Id == nextStageId);
+            if (nextStage == null) return;
 
-            if (nextStage == null)
-            {
-                Console.WriteLine($"Error: No se encontró la etapa {nextStageId}");
-                return;
-            }
-
-            // 2. Agregamos el dispositivo a la cola destino
             nextStage.AddToQueue(device);
 
-            // 3. Verificamos disponibilidad y arrancamos el proceso si se puede
             if (nextStage.IsAvailable())
             {
-                // Sacamos el dispositivo de la cola porque lo vamos a procesar YA
                 var devToProcess = nextStage.TakeFromQueue();
+                nextStage.StartService(devToProcess, CurrentTime);
 
-                // Arrancamos el servicio
-                nextStage.StartService(devToProcess);
-
-                // Calculamos tiempo de servicio (ajusta según la etapa si es necesario)
                 double serviceTime = 0.1 + (_generator.SiguienteUniforme() * 0.2);
                 _calendar.AddEvent(new Event(CurrentTime + serviceTime, EventType.FinDeServicio, nextStage.Id));
             }
         }
+
+        public void SetBacklog(int cantidadSobrante)
+        {
+            _results.BacklogInicial = cantidadSobrante;
+
+            var stage1 = _stages.Find(s => s.Id == 1);
+
+            for (int i = 0; i < cantidadSobrante; i++)
+            {
+                // Creamos los equipos sobrantes y los metemos a la cola.
+                // Usamos CreateRandomDevice pero NO sumamos a LaptopsArrived/DesktopsArrived
+                // porque ya fueron contabilizados en la campaña anterior.
+                var device = CreateRandomDevice();
+                stage1.AddToQueue(device);
+            }
+        }
+
+
     }
 }
