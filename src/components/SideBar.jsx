@@ -12,7 +12,7 @@ function SideBar() {
 
   return (
     <>
-      <Navbar className="bg-dark w-25 min-vh-100 align-items-start">
+      <Navbar className="bg-dark w-25 min-vh-100 align-items-start sidebar-fixed">
         <section className="w-100 p-4">
           <h3>Configuración Inicial</h3>
           <article className="my-4">

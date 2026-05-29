@@ -2,6 +2,37 @@ body {
   font-family: "Elms Sans", sans-serif;
   background-color: #2e2e2e;
   color: white;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar {
+  background-color: black;
+  z-index: 1001;
+  position: relative;
+}
+
+.informe-container {
+  min-height: calc(100vh - 56px);
+}
+
+.informe-content {
+  overflow-y: auto;
+  max-height: calc(100vh - 56px);
+  margin-left: 25%;
+}
+
+.informe-main {
+  flex-grow: 1;
+}
+
+.sidebar-fixed {
+  position: fixed;
+  left: 0;
+  top: 56px;
+  height: calc(100vh - 56px);
+  overflow-y: auto;
+  z-index: 1000;
 }
 
 .logo {
@@ -65,9 +96,13 @@ body {
 }
 
 .cards,
-h4,
-i {
+h4 {
   color: white;
   background-color: rgb(42, 37, 37);
   padding: 5px;
+}
+
+i {
+  color: white;
+  background-color: transparent;
 }
