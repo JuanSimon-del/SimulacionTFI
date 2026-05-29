@@ -70,6 +70,7 @@ namespace SimulacionTFI.API.Controllers
                 response.Summary.PlasticoAltaCalidad += result.PlasticoAltaCalidad;
                 response.Summary.PlasticoMediaCalidad += result.PlasticoMediaCalidad;
                 response.Summary.PlasticoBajaCalidad += result.PlasticoBajaCalidad;
+                response.Summary.CantidadPlacasRecuperadas += result.CantidadPlacasRecuperadas;
             }
 
             // Opcional por seguridad: Redondeamos el resumen global al final 

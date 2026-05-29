@@ -131,6 +131,7 @@ namespace SimulacionTFI.Aplication.Core
             else if (e.StageId == 2 && finishedDevice != null) // Desarme
             {
                 _results.RecycledCount++;
+                _results.CantidadPlacasRecuperadas++;
 
                 var materiales = finishedDevice.Desarmar();
                 var stage3 = _stages.Find(s => s.Id == 3);
