@@ -26,10 +26,6 @@ body {
   overflow-y: auto; /* single page scrollbar */
 }
 
-.informe-container {
-  /* no fixed height here; content will flow inside .app-content */
-}
-
 .informe-content {
   margin-left: 25%; /* leave space for fixed sidebar */
 }
@@ -46,6 +42,44 @@ body {
   z-index: 1000;
   width: 25%;
   overflow: auto; /* allow sidebar internal scroll when content grows */
+}
+
+/* Truck animation inside sidebar */
+.sidebar-truck {
+  position: relative;
+  height: 80px;
+  overflow: hidden;
+  padding: 0 0.5rem;
+}
+
+.sidebar-truck .truck-img {
+  position: absolute;
+  top: 50%;
+  left: -25%;
+  transform: translateY(-50%) scaleX(1);
+  width: 64px;
+  will-change: transform, left;
+  animation: truck-move 6s linear infinite;
+}
+
+/* Move right while facing right, then flip and move left while facing left */
+@keyframes truck-move {
+  0% {
+    left: -25%;
+    transform: translateY(-50%) scaleX(1);
+  }
+  49.9% {
+    left: 100%;
+    transform: translateY(-50%) scaleX(1);
+  }
+  50% {
+    left: 100%;
+    transform: translateY(-50%) scaleX(-1);
+  }
+  100% {
+    left: -25%;
+    transform: translateY(-50%) scaleX(-1);
+  }
 }
 
 /* When the app shows the Informe (sidebar present), offset the footer and full-width content */

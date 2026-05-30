@@ -22,7 +22,7 @@ function SideBar() {
                 <p className="my-auto">Cantidad de Campañas: </p>
               </Col>
               <Col>
-                <input type="text" placeholder="10" className="ms-3 w-50 text-center" />
+                <input type="text" placeholder="3" className="ms-3 w-50 text-center" />
               </Col>
             </Row>
           </article>
@@ -37,17 +37,21 @@ function SideBar() {
                   <p className="mb-0 ms-2">{trabajador.nombre}</p>
                 </Col>
                 <Col>
-                  <input type="text" className="me-2 w-100 text-center" placeholder="3" />
+                  <input type="text" className="me-2 w-100 text-center" placeholder="5" />
                 </Col>
               </Row>
             ))}
           </article>
           <article>
             <h5 className="my-4">Resultados por Campaña (3)</h5>
-            <Button className="w-100 btn-secondary mb-3">Campaña 1</Button>
-            <Button className="w-100 btn-secondary mb-3">Campaña 2</Button>
-            <Button className="w-100 btn-secondary mb-3">Campaña 3</Button>
+            <Button className="w-100 btn-secondary mb-2">Campaña 1</Button>
+            <Button className="w-100 btn-secondary mb-2">Campaña 2</Button>
+            <Button className="w-100 btn-secondary mb-2">Campaña 3</Button>
           </article>
+
+          <div className="sidebar-truck mt-3 d-flex align-items-center">
+            <img src="../public/camion.png" alt="Camión" className="truck-img" />
+          </div>
         </section>
       </Navbar>
     </>

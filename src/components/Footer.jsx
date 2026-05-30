@@ -15,7 +15,7 @@ function Footer() {
             </div>
           </Col>
 
-          <Col md={4} className="mb-4 mb-md-0 d-flex flex-column">
+          <Col md={5} className="mb-4 mb-md-0 d-flex flex-column">
             <div className="w-50 mx-auto">
               <h5 className="mb-3">Estudiantes</h5>
               <p className="mb-1">Cabrera Navarro, Tomás</p>
@@ -27,7 +27,7 @@ function Footer() {
             </div>
           </Col>
 
-          <Col md={4} className="mb-4 mb-md-0 d-flex flex-column">
+          <Col md={3} className="mb-4 mb-md-0 d-flex flex-column">
           <div className="mx-auto">
             <h5 className="mb-3">Profesores</h5>
             <p className="mb-1">Paredi, Mario Luis</p>
