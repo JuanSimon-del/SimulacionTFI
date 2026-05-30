@@ -1,23 +1,30 @@
 import Dropdown from "react-bootstrap/Dropdown";
 
-function DropdownTrabajadores() {
+function DropdownTrabajadores({ etapa, valor, onChange }) {
   return (
     <>
       <section className="d-flex w-100 my-3">
         <input
-          type="text"
+          type="number"
           placeholder="Ej: 5 trabajadores"
+          value={valor}
+          onChange={(e) => onChange(parseInt(e.target.value) || 0)}
           className="ms-5 px-3 border border-1 rounded-2 input bg-light me-2"
+          min="1"
         />
         <Dropdown>
-          <Dropdown.Toggle
-            variant="success"
-            id="dropdown-basic"
-          ></Dropdown.Toggle>
+          <Dropdown.Toggle variant="success" id={`dropdown-${etapa}`}>
+            {valor || "Seleccionar"}
+          </Dropdown.Toggle>
           <Dropdown.Menu>
-            <Dropdown.Item href="#/action-1">1</Dropdown.Item>
-            <Dropdown.Item href="#/action-2">2</Dropdown.Item>
-            <Dropdown.Item href="#/action-3">3</Dropdown.Item>
+            {[1, 2, 3, 4, 5].map((num) => (
+              <Dropdown.Item
+                key={num}
+                onClick={() => onChange(num)}
+              >
+                {num}
+              </Dropdown.Item>
+            ))}
           </Dropdown.Menu>
         </Dropdown>
       </section>
