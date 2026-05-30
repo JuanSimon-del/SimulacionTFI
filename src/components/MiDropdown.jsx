@@ -7,11 +7,9 @@ function MiDropdown() {
           <Dropdown.Toggle variant="success"></Dropdown.Toggle>
 
           <Dropdown.Menu>
-            <Dropdown.Item href="#/action-1">Opción 1</Dropdown.Item>bg-light 
-
-            <Dropdown.Item href="#/action-2">Opción 2</Dropdown.Item>
-
-            <Dropdown.Item href="#/action-3">Opción 3</Dropdown.Item>
+            <Dropdown.Item href="#/action-1">1 campaña</Dropdown.Item>
+            <Dropdown.Item href="#/action-2">2 campañas</Dropdown.Item>
+            <Dropdown.Item href="#/action-3">3 campañas</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
     </>

@@ -9,7 +9,7 @@ function ResumenCampañas() {
         <Row>
           <Col md={6}>
             <h5 className="my-4">Ingreso de dispositivos</h5>
-            <Table striped bordered hover variant="secondary">
+            <Table striped bordered hover variant="dark">
               <tbody>
                 <tr>
                   <th className="w-75">Dispositivos Ingresados</th>
@@ -28,19 +28,19 @@ function ResumenCampañas() {
           </Col>
           <Col md={6}>
             <h5 className="my-4">Resultado del Procesamiento</h5>
-            <Table striped bordered hover variant="secondary">
+            <Table striped bordered hover variant="dark">
               <tbody>
                 <tr>
                   <th className="w-75">Equipos Refuncionalizados</th>
-                  <td className="w-50 text-center">95</td>
+                  <td className="w-50 text-center">25</td>
                 </tr>
                 <tr>
                   <th className="w-75">Equipos Reciclados</th>
-                  <td className="text-center">65</td>
+                  <td className="text-center">70</td>
                 </tr>
                 <tr>
                   <th className="w-75">Dispositivos No Procesados</th>
-                  <td className="text-center">30</td>
+                  <td className="text-center">12</td>
                 </tr>
               </tbody>
             </Table>
@@ -49,7 +49,7 @@ function ResumenCampañas() {
         <Row>
           <Col>
             <h5 className="my-4">Estado Operativo Durante la Campaña</h5>
-            <Table striped bordered hover variant="secondary">
+            <Table striped bordered hover variant="dark">
               <thead>
                 <tr>
                   <th>Etapa</th>
@@ -78,7 +78,7 @@ function ResumenCampañas() {
                 <tr>
                   <td className="w-25">Separación de Materiales</td>
                   <td>15h</td>
-                  <td className="text-secondary">
+                  <td className="text-warning">
                     <b>Congestión Media</b>
                   </td>
                   <td>Cola promedio: 2 equipos</td>
